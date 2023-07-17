@@ -1,5 +1,7 @@
 package db.mysql;
 
+import db.PropertiesUtils;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -29,6 +31,10 @@ public class MySQLConnectionUtils {
         this.db = properties.getProperty("db");
         this.user = properties.getProperty("user");
         this.password = properties.getProperty("password");
+    }
+
+    public MySQLConnectionUtils(String propertiesFiles) {
+        this(PropertiesUtils.getProperties(propertiesFiles));
     }
 
     public void connect() {
