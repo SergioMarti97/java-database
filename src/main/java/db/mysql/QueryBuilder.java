@@ -156,18 +156,4 @@ public class QueryBuilder {
         this.fields = fields;
     }
 
-    // Main
-
-    public static void main(String[] args) {
-        String entityName = "my_table";
-        String idField = "id_of_my_table";
-        String[] fields = new String[] {
-                "field_one",
-                "field_two",
-                "field_three"
-        };
-        QueryBuilder queryBuilder = new QueryBuilder(entityName, idField, fields);
-        System.out.println(queryBuilder.buildQueryInsert(false));
-    }
-
 }
