@@ -10,6 +10,15 @@ Esto permite que un programa tenga persistencia de datos.
 
 **autor**: Sergio Martí Torregrosa
 
+## Actualizaciones
+
+En este apartado se recopilan todos los cambios que se han realizado en el repositorio.
+
+Fecha 17/07/2023
+
+  * Añadida la nueva clase "QueryBuilder": contiene los métodos necesarios para construir queries simples, indicando el nombre de la entidad, el campo de la clave primaria y el resto de campos.
+  * Nuevo constructor para "MySQLConnectionUtils": indicando el path del archivo "app.properties" que contiene los datos necesarios para realizar la conexión a la base de datos.
+
 ## Data Access Object
 
 Los objetos "*Data Access Object*" o "DAO" corresponden a la capa de acceso a datos para una tabla o entidad en una base de datos MySQL.
