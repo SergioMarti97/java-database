@@ -19,6 +19,11 @@ Fecha 17/07/2023
   * Añadida la nueva clase "QueryBuilder": contiene los métodos necesarios para construir queries simples, indicando el nombre de la entidad, el campo de la clave primaria y el resto de campos.
   * Nuevo constructor para "MySQLConnectionUtils": indicando el path del archivo "app.properties" que contiene los datos necesarios para realizar la conexión a la base de datos.
 
+Fecha 18/07/2023
+
+  * QueryBuilder contiene ahora métodos para seleccionar que campos se quieren incluir en la query
+  * MySQLGenericDAO contiene un objeto QueryBuilder
+
 ## Data Access Object
 
 Los objetos "*Data Access Object*" o "DAO" corresponden a la capa de acceso a datos para una tabla o entidad en una base de datos MySQL.
