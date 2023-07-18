@@ -34,7 +34,13 @@ public class MySQLConnectionUtils {
     }
 
     public MySQLConnectionUtils(String propertiesFiles) {
-        this(PropertiesUtils.getProperties(propertiesFiles));
+        Properties properties = PropertiesUtils.getProperties(propertiesFiles);
+        if (!properties.isEmpty()) {
+            this.ip = properties.getProperty("ip");
+            this.db = properties.getProperty("db");
+            this.user = properties.getProperty("user");
+            this.password = properties.getProperty("password");
+        }
     }
 
     public void connect() {

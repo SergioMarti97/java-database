@@ -111,4 +111,77 @@ class QueryBuilderTest {
         assertEquals(expected, queryBuilder.buildQueryUpdateById());
     }
 
+    @Test
+    @DisplayName("Construir la query \"insert\" filtrando los campos")
+    void queryBuilderInsertFiltered() {
+        String expected = "insert into `my_table`(`table_id`, `field_two`, `field_three`) values(?, ?, ?);";
+        String entityName = "my_table";
+        String entityId = "table_id";
+        String[] fields = {
+                "field_one",
+                "field_two",
+                "field_three",
+                "field_four",
+                "field_five"
+        };
+        boolean[] include = {
+                false,
+                true,
+                true,
+                false,
+                false
+        };
+        QueryBuilder queryBuilder = new QueryBuilder(entityName, entityId, fields);
+        assertEquals(expected, queryBuilder.buildQueryInsert(false, include));
+    }
+
+    @Test
+    @DisplayName("Construir la query \"update\" en base al \"id\" filtrando los campos")
+    void queryBuilderUpdateByIdFiltered() {
+        String expected = "update `my_table` set `field_two` = ?, `field_three` = ? where `table_id` = ?;";
+        String entityName = "my_table";
+        String entityId = "table_id";
+        String[] fields = {
+                "field_one",
+                "field_two",
+                "field_three",
+                "field_four",
+                "field_five"
+        };
+        boolean[] include = {
+                false,
+                true,
+                true,
+                false,
+                false
+        };
+        QueryBuilder queryBuilder = new QueryBuilder(entityName, entityId, fields);
+        assertEquals(expected, queryBuilder.buildQueryUpdateById(include));
+    }
+
+
+    @Test
+    @DisplayName("Construir la query \"update\" en base al a un campo, filtrando algunos campos")
+    void queryBuilderUpdateByFieldFiltered() {
+        String expected = "update `my_table` set `field_two` = ?, `field_three` = ? where `field_five` = ?;";
+        String entityName = "my_table";
+        String entityId = "table_id";
+        String[] fields = {
+                "field_one",
+                "field_two",
+                "field_three",
+                "field_four",
+                "field_five"
+        };
+        boolean[] include = {
+                false,
+                true,
+                true,
+                false,
+                false
+        };
+        QueryBuilder queryBuilder = new QueryBuilder(entityName, entityId, fields);
+        assertEquals(expected, queryBuilder.buildQueryUpdateByField(4, include));
+    }
+
 }
