@@ -21,8 +21,12 @@ Fecha 17/07/2023
 
 Fecha 18/07/2023
 
-  * QueryBuilder contiene ahora métodos para seleccionar que campos se quieren incluir en la query
-  * MySQLGenericDAO contiene un objeto QueryBuilder
+  * QueryBuilder contiene ahora métodos para seleccionar que campos se quieren incluir en la query.
+  * MySQLGenericDAO contiene un objeto QueryBuilder.
+
+Fecha 26/09/2023
+
+  * Nuevo paquete Input/Output (IO) con las clases BasicTextIO. Estas clases permiten escribir y leer la información línea a línea en un archivo de texto plano.
 
 ## Data Access Object
 
