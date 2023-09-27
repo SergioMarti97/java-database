@@ -1,4 +1,6 @@
-package db.mysql;
+package db.mysql.utils;
+
+import db.mysql.BuildFromResultSet;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,6 +1,7 @@
 package db.io;
 
 import org.junit.jupiter.api.Test;
+import test.Person;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -12,37 +13,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BasicTextGenericDAOTest {
 
-    static class Person {
-
-        int id;
-
-        String name;
-
-        float height;
-
-        LocalDate birthday;
-
-        public Person(int id, String name, float height, LocalDate birthday) {
-            this.id = id;
-            this.name = name;
-            this.height = height;
-            this.birthday = birthday;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("%d %s %.3f %s", id, name, height, birthday.toString());
-        }
-
-    }
-
-    static class BasicTestPersonDAO extends BasicTextGenericDAO<Person> {
+    static class PersonDAO extends BasicTextGenericDAO<Person> {
 
         final String splitCharacter = ";";
 
         final String pattern = "^\\d+;[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+;[+-]?([0-9]+([,][0-9]*)?|[,][0-9]+);[0-9]{4}-[0-9]{2}-[0-9]{2}";
 
-        public BasicTestPersonDAO(String fileName) {
+        public PersonDAO(String fileName) {
             super(fileName);
         }
 
@@ -70,14 +47,14 @@ class BasicTextGenericDAOTest {
 
         @Override
         public String write(Person o) {
-            return "" + o.id + splitCharacter + o.name + splitCharacter + String.format("%.3f", o.height) + splitCharacter + o.birthday.toString();
+            return "" + o.getId() + splitCharacter + o.getName() + splitCharacter + String.format("%.3f", o.getHeight()) + splitCharacter + o.getBirthday().toString();
         }
 
     }
 
     static final String fileName = "C:\\Users\\Sergio\\IdeaProjects\\java-database\\src\\test\\resources\\test.txt";
 
-    static BasicTestPersonDAO dao = new BasicTestPersonDAO(fileName);
+    static PersonDAO dao = new PersonDAO(fileName);
 
     static Random rnd = new Random(123);
 
@@ -138,9 +115,9 @@ class BasicTextGenericDAOTest {
         Person p = dao.read(id);
 
         System.out.println("old: " + p);
-        p.name = generateRandomString(lenName);
-        p.height = rnd.nextFloat();
-        p.birthday = generateRandomLocalDate();
+        p.setName(generateRandomString(lenName));
+        p.setHeight(rnd.nextFloat());
+        p.setBirthday(generateRandomLocalDate());
         System.out.println("new: " + p);
 
         boolean result = dao.update(id, p);

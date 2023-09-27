@@ -1,6 +1,7 @@
 package db.mysql;
 
 import db.GenericDAO;
+import db.mysql.utils.MySQLDatabaseUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,6 +21,13 @@ public abstract class MySQLGenericDAO<T> implements GenericDAO<T>, BuildFromResu
      * Query builder for simple queries
      */
     protected QueryBuilder queryBuilder;
+
+    // Default constructor
+
+    public MySQLGenericDAO(Connection con) {
+        this.con = con;
+    }
+
 
     // Common methods for all DAOs
 

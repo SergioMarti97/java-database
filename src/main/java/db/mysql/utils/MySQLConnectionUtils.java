@@ -1,4 +1,4 @@
-package db.mysql;
+package db.mysql.utils;
 
 import db.PropertiesUtils;
 
