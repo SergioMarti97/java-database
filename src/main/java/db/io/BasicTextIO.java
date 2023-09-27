@@ -4,19 +4,13 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BasicTextIO<T> {
+public abstract class BasicTextIO<T> implements IBasicTextIO<T> {
 
     protected String fileName;
 
     public BasicTextIO(String fileName) {
         this.fileName = fileName;
     }
-
-    public abstract boolean isMalformed(String line);
-
-    public abstract T build(String line);
-
-    public abstract String write(T o);
 
     public boolean save(List<T> list) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(this.fileName))) {

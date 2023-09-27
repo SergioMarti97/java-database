@@ -24,9 +24,9 @@ Fecha 18/07/2023
   * QueryBuilder contiene ahora métodos para seleccionar que campos se quieren incluir en la query.
   * MySQLGenericDAO contiene un objeto QueryBuilder.
 
-Fecha 26/09/2023
+Fecha 26/09/2023 y 27/09/2023
 
-  * Nuevo paquete Input/Output (IO) con las clases BasicTextIO. Estas clases permiten escribir y leer la información línea a línea en un archivo de texto plano.
+  * Nuevo paquete Input/Output (IO) con las clases: BasicTextIO y BasicTextGenericDAO. Estas clases permiten escribir y leer la información línea a línea en un archivo de texto plano.
 
 ## Data Access Object
 
@@ -61,7 +61,10 @@ El repositorio contiene las siguientes clases:
     * *executeUpdate*: ejecuta una sentencia contenida en un objeto *PreparedStatement* que puede realizar modificaciones sobre la base de datos.
     * *searchLike*: devuelve una lista de registros. Implementa el código necesario para la funcionalidad de búsqueda de SQL utilizando la palabra reservada "*like*".
   
-## Ejemplo
+## Ejemplos
+
+
+### Ejemplo de DAO utilizando MySQL
 
 Se parte de las siguientes clases:
 
@@ -229,3 +232,97 @@ public class FarmDAO extends MySQLGenericDAO<Farm> implements SearchLike<Farm> {
 
 }
 ``` 
+
+### Ejemplo DAO utilizando un archivo de texto plano
+
+Se parte de las siguientes clases:
+
+Una clase que representa una persona, de la cual se almacena la información sobre su nombre, su altura y su fecha de nacimiento.
+Se han elegido estos campos porque cada campo es de un tipo distinto.
+
+```java
+class Person {
+
+  int id;
+
+  String name;
+
+  float height;
+
+  LocalDate birthday;
+
+  public Person(int id, String name, float height, LocalDate birthday) {
+    this.id = id;
+    this.name = name;
+    this.height = height;
+    this.birthday = birthday;
+  }
+
+  @Override
+  public String toString() {
+    return String.format("%d %s %.3f %s", id, name, height, birthday.toString());
+  }
+
+}
+```
+
+La siguiente clase es el Data Acces Object y hereda de la clase "BasicTextGenericDAO". Solo se debe de implementar 3 métodos:
+
+  * isMalformed(String line): comprobar si la línea de texto tiene el formato correcto para poder construir la instancia. Se puede comprobar mediante regex.
+  * build(String line): como se debe de construir a partir de la línea de texto el objeto en cuestión.
+  * write(T o): como se debe de convertir el objeto a una línea de texto.
+
+```java
+class BasicTestPersonDAO extends BasicTextGenericDAO<Person> {
+
+  final String splitCharacter = ";";
+
+  final String pattern = "^\\d+;[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+;[+-]?([0-9]+([,][0-9]*)?|[,][0-9]+);[0-9]{4}-[0-9]{2}-[0-9]{2}";
+
+  public BasicTestPersonDAO(String fileName) {
+    super(fileName);
+  }
+
+  @Override
+  public boolean isMalformed(String line) {
+    return !Pattern.matches(pattern, line);
+  }
+
+  @Override
+  public Person build(String line) {
+    String[] split = line.split(splitCharacter);
+    if (split.length == 4) {
+      try {
+        int id = Integer.parseInt(split[0]);
+        String name = split[1];
+        float height = Float.parseFloat(split[2].replace(",", "."));
+        LocalDate birthday = LocalDate.parse(split[3]);
+        return new Person(id, name, height, birthday);
+      } catch (NumberFormatException | DateTimeParseException e) {
+        e.printStackTrace();
+      }
+    }
+    return null;
+  }
+
+  @Override
+  public String write(Person o) {
+    return "" + o.id + splitCharacter + o.name + splitCharacter + String.format("%.3f", o.height) + splitCharacter + o.birthday.toString();
+  }
+
+}
+```
+
+El funcionamiento sigue los siguientes pasos:
+
+  * Al construir el DAO, se lee el archivo de texto plano y se almacena la información en memoria.
+  * Se pueden realizar lecturas y escrituras o los cambios que se quieran sobre los registros. Los cambios se guardan en memoria, pero no en el archivo de texto plano.
+  * Si se quiere guardar el estado de los cambios actuales para realizar una operación compleja, o una operación que podría comprometer la integridad del archivo, se debe llamar a la función "prepareToCommit()".
+  * Si se quiere volver al estado anterior previo a los cambios, se debe de llamar a la función "rollback()". Los registros en memoria volverán al mismo estado al que se encontraban cuando se llamó a la función "commit()" o "prepareToCommit()".
+  * Cuando se quieren guardar todos los cambios, se debe de llamar a la función "commit()". Cuando se llama a esta función, se sobrescribe el archivo de texto plano con la información en memoria.
+
+Las operaciones de inicializar el DAO y realizar un commit son las operaciones más lentas, pueden tomar más tiempo en función del tamaño del archivo.
+Al igual que si se trabajan con miles de millones de registros las operaciones se pueden ralentizar o incluso se puede llegar desbordar la memoria de la máquina.
+Por estos motivos recomiendo construir el DAO al inicio del programa, realizar todos los cambios necesarios sobre los registros y llamar a la función "commit()" al final.
+
+
