@@ -1,6 +1,6 @@
 package db.io;
 
-public interface IBasicTextIO<T> {
+public interface IPlainTextIO<T> {
 
     boolean isMalformed(String line);
 

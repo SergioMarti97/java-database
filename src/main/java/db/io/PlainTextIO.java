@@ -4,11 +4,11 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BasicTextIO<T> implements IBasicTextIO<T> {
+public abstract class PlainTextIO<T> implements IPlainTextIO<T> {
 
     protected String fileName;
 
-    public BasicTextIO(String fileName) {
+    public PlainTextIO(String fileName) {
         this.fileName = fileName;
     }
 

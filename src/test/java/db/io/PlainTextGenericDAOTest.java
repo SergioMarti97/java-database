@@ -11,9 +11,9 @@ import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BasicTextGenericDAOTest {
+class PlainTextGenericDAOTest {
 
-    static class PersonDAO extends BasicTextGenericDAO<Person> {
+    static class PersonDAO extends PlainTextGenericDAO<Person> {
 
         final String splitCharacter = ";";
 

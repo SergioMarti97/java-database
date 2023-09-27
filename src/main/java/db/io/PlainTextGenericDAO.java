@@ -5,16 +5,16 @@ import db.GenericDAO;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BasicTextGenericDAO<T> implements IBasicTextIO<T>, GenericDAO<T> {
+public abstract class PlainTextGenericDAO<T> implements IPlainTextIO<T>, GenericDAO<T> {
 
     protected List<String> lines;
 
     protected List<String> copyLines;
 
-    protected BasicTextIO<String> strIO;
+    protected PlainTextIO<String> strIO;
 
-    public BasicTextGenericDAO(String fileName) {
-        strIO = new BasicTextIO<>(fileName) {
+    public PlainTextGenericDAO(String fileName) {
+        strIO = new PlainTextIO<>(fileName) {
             @Override
             public boolean isMalformed(String line) {
                 return false;
@@ -131,7 +131,7 @@ public abstract class BasicTextGenericDAO<T> implements IBasicTextIO<T>, Generic
         return copyLines;
     }
 
-    public BasicTextIO<String> getStrIO() {
+    public PlainTextIO<String> getStrIO() {
         return strIO;
     }
 

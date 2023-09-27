@@ -26,7 +26,7 @@ Fecha 18/07/2023
 
 Fecha 26/09/2023 y 27/09/2023
 
-  * Nuevo paquete Input/Output (IO) con las clases: BasicTextIO y BasicTextGenericDAO. Estas clases permiten escribir y leer la información línea a línea en un archivo de texto plano.
+  * Nuevo paquete Input/Output (IO) con las clases: PlainTextIO y PlainTextGenericDAO. Estas clases permiten escribir y leer la información línea a línea en un archivo de texto plano.
 
 ## Data Access Object
 
@@ -99,7 +99,7 @@ class Person {
 El objeto de tipo DAO para la clase anterior.
 Ahora la clase "MySQLGenericDAO" contiene un objeto "QueryBuilder", por lo que las sentencias de SQL para las operaciones básicas se pueden generar automáticamente con este objeto.
 Si se prefiere, se pueden definir las sentencias SQL propias y tenerlas como constantes de la clase.
-Suponemos que la entidad en la base de dats MySQL tiene los mismos nombres de los campos. 
+Suponemos que la entidad en la base de datos MySQL tiene los mismos nombres de los campos. 
 Pero si fueran diferentes, no habría ningún problema, se tendría que poner los nombres de los campos de la entidad cuando se instancia el objeto "QueryBuilder". 
 
 ```java
@@ -182,20 +182,20 @@ class PersonDAO extends MySQLGenericDAO<Person> {
 
 ### Ejemplo DAO utilizando un archivo de texto plano
 
-La siguiente clase es el Data Acces Object y hereda de la clase "BasicTextGenericDAO". Solo se debe de implementar 3 métodos:
+La siguiente clase es el Data Acces Object y hereda de la clase "PlainTextGenericDAO". Solo se debe de implementar 3 métodos:
 
   * isMalformed(String line): comprobar si la línea de texto tiene el formato correcto para poder construir la instancia. Se puede comprobar mediante regex.
   * build(String line): como se debe de construir a partir de la línea de texto el objeto en cuestión.
   * write(T o): como se debe de convertir el objeto a una línea de texto.
 
 ```java
-class BasicTestPersonDAO extends BasicTextGenericDAO<Person> {
+class PersonDAO extends PlainTextGenericDAO<Person> {
 
   final String splitCharacter = ";";
 
   final String pattern = "^\\d+;[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+;[+-]?([0-9]+([,][0-9]*)?|[,][0-9]+);[0-9]{4}-[0-9]{2}-[0-9]{2}";
 
-  public BasicTestPersonDAO(String fileName) {
+  public PersonDAO(String fileName) {
     super(fileName);
   }
 
