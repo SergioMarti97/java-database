@@ -22,13 +22,6 @@ public abstract class MySQLGenericDAO<T> implements GenericDAO<T>, BuildFromResu
      */
     protected QueryBuilder queryBuilder;
 
-    // Default constructor
-
-    public MySQLGenericDAO(Connection con) {
-        this.con = con;
-    }
-
-
     // Common methods for all DAOs
 
     /**

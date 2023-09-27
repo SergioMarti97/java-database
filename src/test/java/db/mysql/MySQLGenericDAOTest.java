@@ -14,7 +14,7 @@ class MySQLGenericDAOTest {
     static class PersonDAO extends MySQLGenericDAO<Person> {
 
         public PersonDAO(Connection con) {
-            super(con);
+            this.con = con;
             queryBuilder = new QueryBuilder("Person", "id", "name", "height", "birthday");
         }
 
