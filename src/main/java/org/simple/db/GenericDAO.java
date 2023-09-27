@@ -1,4 +1,4 @@
-package db;
+package org.simple.db;
 
 import java.util.List;
 

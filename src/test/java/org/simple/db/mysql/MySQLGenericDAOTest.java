@@ -1,13 +1,12 @@
-package db.mysql;
+package org.simple.db.mysql;
 
-import db.mysql.utils.MySQLDatabaseUtils;
+import org.simple.db.mysql.query.QueryBuilder;
+import org.simple.db.mysql.utils.MySQLDatabaseUtils;
 import org.junit.jupiter.api.Test;
 import test.Person;
 
 import java.sql.*;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class MySQLGenericDAOTest {
 

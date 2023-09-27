@@ -1,7 +1,8 @@
-package db;
+package org.simple.db;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.simple.db.properties.PropertiesUtils;
 
 import java.util.Properties;
 

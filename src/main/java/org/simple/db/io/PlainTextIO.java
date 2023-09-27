@@ -1,4 +1,4 @@
-package db.io;
+package org.simple.db.io;
 
 import java.io.*;
 import java.util.ArrayList;

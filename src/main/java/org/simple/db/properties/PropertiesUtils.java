@@ -1,4 +1,4 @@
-package db;
+package org.simple.db.properties;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

@@ -1,7 +1,8 @@
-package db.mysql;
+package org.simple.db.mysql;
 
-import db.GenericDAO;
-import db.mysql.utils.MySQLDatabaseUtils;
+import org.simple.db.GenericDAO;
+import org.simple.db.mysql.query.QueryBuilder;
+import org.simple.db.mysql.utils.MySQLDatabaseUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

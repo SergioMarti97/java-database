@@ -1,4 +1,4 @@
-package db.io;
+package org.simple.db.io;
 
 import org.junit.jupiter.api.Test;
 import test.Person;

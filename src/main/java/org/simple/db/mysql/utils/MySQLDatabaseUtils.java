@@ -1,6 +1,6 @@
-package db.mysql.utils;
+package org.simple.db.mysql.utils;
 
-import db.mysql.BuildFromResultSet;
+import org.simple.db.mysql.BuildFromResultSet;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

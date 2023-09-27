@@ -1,7 +1,8 @@
-package db.mysql;
+package org.simple.db.mysql.query;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.simple.db.mysql.query.QueryBuilder;
 
 import static org.junit.jupiter.api.Assertions.*;
 

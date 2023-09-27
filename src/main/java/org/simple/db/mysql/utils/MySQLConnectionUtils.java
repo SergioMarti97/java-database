@@ -1,6 +1,6 @@
-package db.mysql.utils;
+package org.simple.db.mysql.utils;
 
-import db.PropertiesUtils;
+import org.simple.db.properties.PropertiesUtils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

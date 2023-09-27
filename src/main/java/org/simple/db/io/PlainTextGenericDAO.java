@@ -1,6 +1,6 @@
-package db.io;
+package org.simple.db.io;
 
-import db.GenericDAO;
+import org.simple.db.GenericDAO;
 
 import java.util.ArrayList;
 import java.util.List;

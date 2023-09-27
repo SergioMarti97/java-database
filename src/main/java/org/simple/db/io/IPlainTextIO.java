@@ -1,4 +1,4 @@
-package db.io;
+package org.simple.db.io;
 
 public interface IPlainTextIO<T> {
 

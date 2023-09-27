@@ -1,4 +1,4 @@
-package db.mysql;
+package org.simple.db.mysql.query;
 
 import java.util.ArrayList;
 import java.util.Arrays;
