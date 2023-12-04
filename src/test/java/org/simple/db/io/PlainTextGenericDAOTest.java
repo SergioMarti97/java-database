@@ -1,7 +1,7 @@
 package org.simple.db.io;
 
 import org.junit.jupiter.api.Test;
-import test.Person;
+import examples.Person;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;

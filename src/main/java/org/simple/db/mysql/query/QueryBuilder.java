@@ -56,7 +56,12 @@ public class QueryBuilder {
      * @param fieldsBool array de booleanos para filtrar los nombres de los campos
      * @return lista filtrada
      */
-    private List<String> filterFields(List<String> fieldsNames, boolean... fieldsBool) {
+    private List<String> filterFields(List<String> fieldsNames, boolean... fieldsBool) throws Exception {
+        if (fieldsNames.size() != fieldsBool.length) {
+            throw new Exception("Different size of selected fields: expected " +
+                    (fieldsNames.size() > fieldsBool.length ? ">" : "<") +
+                    " provided");
+        }
         // Calcular la nueva lista campos
         List<String> l = new ArrayList<>();
         for (int i = 0; i < fieldsNames.size(); i++) {
@@ -101,11 +106,7 @@ public class QueryBuilder {
         return buildQueryInsert(true);
     }
 
-    public String buildQueryInsert(boolean idAuto, boolean... fields) {
-        if (this.fields.size() != fields.length) {
-            return null;
-        }
-
+    public String buildQueryInsert(boolean idAuto, boolean... fields) throws Exception {
         StringBuilder out = new StringBuilder();
 
         out.append("insert into ");
@@ -138,7 +139,7 @@ public class QueryBuilder {
         return out.toString();
     }
 
-    public String buildQueryInsert(boolean... fields) {
+    public String buildQueryInsert(boolean... fields) throws Exception {
         return buildQueryInsert(true, fields);
     }
 
@@ -151,6 +152,13 @@ public class QueryBuilder {
         return "select * from " +
                 '`' + entityName + "` " +
                 "where `" + idField + "` = %s;";
+    }
+
+    public String buildQuerySelectByTwoIds(String id1, String id2) {
+        return "select * from " + '`' + entityName + '`' +
+                "where " +
+                '`' + id1 + '`' + " = %s and " +
+                '`' + id2 + '`' + " = %s;";
     }
 
     public String buildQuerySelectByField(int idxField) {
@@ -171,6 +179,14 @@ public class QueryBuilder {
                 '`' + entityName + "` " +
                 "where " +
                 '`' + fields.get(idxField) + "` = ?;";
+    }
+
+    public String buildQueryDeleteByTwoIds(String id1, String id2) {
+        return "delete from " +
+                '`' + entityName + '`' +
+                "where " +
+                '`' + id1 + '`' + " = ? and " +
+                '`' + id2 + '`' + " = ?;";
     }
 
     public String buildQueryUpdateById() {
@@ -196,6 +212,32 @@ public class QueryBuilder {
         return out.toString();
     }
 
+    public String buildQueryUpdateByTwoIds(String id1, String id2) {
+        StringBuilder out = new StringBuilder();
+
+        out.append("update ");
+        addFieldWithAccents(out, entityName).append(' ');
+        out.append("set ");
+
+        out.append('`').append(id1).append("` = ?, ");
+
+        if (!fields.isEmpty()) {
+            out.append('`').append(fields.get(0)).append("` = ?");
+            for (int i = 1; i < fields.size(); i++) {
+                String field = fields.get(i);
+                out.append(", ");
+                addFieldWithAccents(out, field);
+                out.append(" = ?");
+            }
+        }
+
+        out.append(" where ");
+        out.append('`').append(id1).append("` = ? and ");
+        out.append('`').append(id2).append("` = ?;");
+
+        return out.toString();
+    }
+
     public String buildQueryUpdateByField(int fieldIndex) {
         StringBuilder out = new StringBuilder();
 
@@ -218,11 +260,7 @@ public class QueryBuilder {
         return out.toString();
     }
 
-    public String buildQueryUpdateById(boolean... fields) {
-        if (this.fields.size() != fields.length) {
-            return null;
-        }
-
+    public String buildQueryUpdateById(boolean... fields) throws Exception {
         StringBuilder out = new StringBuilder();
 
         out.append("update ");
@@ -246,11 +284,7 @@ public class QueryBuilder {
         return out.toString();
     }
 
-    public String buildQueryUpdateByField(int fieldIndex, boolean... fields) {
-        if (this.fields.size() != fields.length) {
-            return null;
-        }
-
+    public String buildQueryUpdateByField(int fieldIndex, boolean... fields) throws Exception {
         StringBuilder out = new StringBuilder();
 
         out.append("update ");
@@ -294,6 +328,10 @@ public class QueryBuilder {
 
     public List<String> getFields() {
         return fields;
+    }
+
+    public String getField(int id) {
+        return fields.get(id);
     }
 
     public void setFields(List<String> fields) {

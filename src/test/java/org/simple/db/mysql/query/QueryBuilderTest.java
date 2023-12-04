@@ -114,7 +114,7 @@ class QueryBuilderTest {
 
     @Test
     @DisplayName("Construir la query \"insert\" filtrando los campos")
-    void queryBuilderInsertFiltered() {
+    void queryBuilderInsertFiltered() throws Exception {
         String expected = "insert into `my_table`(`table_id`, `field_two`, `field_three`) values(?, ?, ?);";
         String entityName = "my_table";
         String entityId = "table_id";
@@ -138,7 +138,7 @@ class QueryBuilderTest {
 
     @Test
     @DisplayName("Construir la query \"update\" en base al \"id\" filtrando los campos")
-    void queryBuilderUpdateByIdFiltered() {
+    void queryBuilderUpdateByIdFiltered() throws Exception {
         String expected = "update `my_table` set `field_two` = ?, `field_three` = ? where `table_id` = ?;";
         String entityName = "my_table";
         String entityId = "table_id";
@@ -163,7 +163,7 @@ class QueryBuilderTest {
 
     @Test
     @DisplayName("Construir la query \"update\" en base al a un campo, filtrando algunos campos")
-    void queryBuilderUpdateByFieldFiltered() {
+    void queryBuilderUpdateByFieldFiltered() throws Exception {
         String expected = "update `my_table` set `field_two` = ?, `field_three` = ? where `field_five` = ?;";
         String entityName = "my_table";
         String entityId = "table_id";

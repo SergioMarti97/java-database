@@ -28,6 +28,12 @@ Fecha 26/09/2023 y 27/09/2023
 
   * Nuevo paquete Input/Output (IO) con las clases: PlainTextIO y PlainTextGenericDAO. Estas clases permiten escribir y leer la información línea a línea en un archivo de texto plano.
 
+Fecha 04/12/2023
+
+  * Fix: QueryBuilder ahora lanza un error si el número de campos que se quieren filtrar para una consulta de *insert* o *update* son diferentes a los disponibles.
+  * QueryBuilder ahora dispone de un método para acceder al nombre de cada campo por su índice.
+  * paquete "*relationships*", contiene clases para representar entidades de relaciones muchos a muchos. Consultar ejemplo.
+
 ## Data Access Object
 
 Los objetos "*Data Access Object*" o "DAO" corresponden a la capa de acceso a datos para una tabla o entidad en una base de datos.
@@ -63,6 +69,10 @@ El repositorio contiene las siguientes clases:
     * *searchLike*: devuelve una lista de registros. Implementa el código necesario para la funcionalidad de búsqueda de SQL utilizando la palabra reservada "*like*".
   * QueryBuilder: esta clase contiene las funciones para construir sentencias de SQL sencillas si se especifica el nombre de la entidad, el campo que se utiliza como clave primaria y el nombre de los demás campos.
   
+## Futuras mejoras:
+
+- Añadir métodos a QueryBuilder que generen *querys* para crear, modificar y eliminar tablas/entidades.
+
 ## Ejemplos
 
 Para realizar los ejemplos voy a utilizar una clase que representa una persona, de la cual se almacena la información sobre su nombre, su altura y su fecha de nacimiento.
@@ -96,11 +106,15 @@ class Person {
 
 ### Ejemplo de DAO utilizando MySQL
 
-El objeto de tipo DAO para la clase anterior.
 Ahora la clase "MySQLGenericDAO" contiene un objeto "QueryBuilder", por lo que las sentencias de SQL para las operaciones básicas se pueden generar automáticamente con este objeto.
 Si se prefiere, se pueden definir las sentencias SQL propias y tenerlas como constantes de la clase.
+
 Suponemos que la entidad en la base de datos MySQL tiene los mismos nombres de los campos. 
 Pero si fueran diferentes, no habría ningún problema, se tendría que poner los nombres de los campos de la entidad cuando se instancia el objeto "QueryBuilder". 
+
+![Entidad person](./sql/captures/entity_person.PNG)
+
+El objeto de tipo DAO para la clase anterior.
 
 ```java
 class PersonDAO extends MySQLGenericDAO<Person> {
@@ -179,6 +193,76 @@ class PersonDAO extends MySQLGenericDAO<Person> {
 
 }
 ``` 
+
+Aquí se muestra el código donde se muestra como realizar la conexión con la base de datos y realizar las cuatro acciones de un *Data Access Object*.
+
+```java
+package examples;
+
+import org.simple.db.mysql.utils.MySQLConnectionUtils;
+
+import java.sql.Connection;
+import java.time.LocalDate;
+
+public class PersonDAOExample {
+
+    public static void main(String[] args) {
+        // Realizar conexión
+        MySQLConnectionUtils conUtils = new MySQLConnectionUtils("C:\\Users\\Sergio\\IdeaProjects\\java-database\\app.properties");
+        Connection con = conUtils.getConnection();
+
+        // Capa de acceso de datos
+        PersonDAO dao = new PersonDAO(con);
+
+        // Insert
+        dao.insert(new Person(-1, "Pepe", 183.00f, LocalDate.of(1997, 10, 31)));
+        dao.insert(new Person(-1, "Luisa", 167.30f, LocalDate.of(1996, 11, 29)));
+        dao.insert(new Person(-1, "Paco", 175.40f, LocalDate.of(2001, 2, 15)));
+        dao.insert(new Person(-1, "Maria", 178.00f, LocalDate.of(1998, 8, 20)));
+
+        // Leer
+        var person = dao.read(2);
+        System.out.println(person);
+
+        for (var p : dao.readAll()) {
+            System.out.println(p);
+        }
+
+        // Update
+        person.setName("Magdalena");
+        person.setBirthday(LocalDate.of(1996, 01, 28));
+        dao.update(person);
+
+        // Delete
+        dao.delete(person.getId());
+
+    }
+
+}
+```
+
+#### Ejemplo de una relación muchos a muchos simple
+
+Supongamos que en la base de datos, se añade una relación muchos a muchos. Para reutilizar el ejemplo anterior, 
+supongamos que se añade una relación muchos a muchos de la entidad "Person" con sigo misma, para representar los amigos que tiene una persona. 
+El modelo se puede ver en la siguiente imagen:
+
+![Entidad person](./sql/captures/entity_person_many_to_many.PNG)
+
+Ahora, se han implementado las clases *ManyToMany* y *MySQLSimpleManyToManyRelationship*, para abordar este tipo de situaciones.
+
+La clase *ManyToMany* es una estructura de datos que sirve para representar las entidades que se forman en las relaciones muchos a muchos. 
+Normalmente, este tipo de entidades solamente tienen dos campos: los dos identificadores de las tablas que relaciona. Normalmente, los identificadores suelen ser *integers*.
+Por lo tanto, esta clase es una generalización que puede utilizarse en la mayoría de relaciones muchos a muchos.
+
+La clase *MySQLSimpleManyToManyDAO* implementa los métodos de un *Data Access Object* para poder trabajar con la base de datos MySQL.
+
+*MySQLSimpleManyToManyRelationship* representa una relación biyectiva entre dos entidades. Contiene dos objetos de tipo *Data Access Object*, 
+para representar las dos direcciones:
+- izquierda → derecha
+- derecha → izquierda
+
+De esta forma se puede trabajar con relaciones muchos a muchos. Hay un ejemplo dentro del proyecto en /test/java/examples/PersonManyToManyExample.
 
 ### Ejemplo DAO utilizando un archivo de texto plano
 

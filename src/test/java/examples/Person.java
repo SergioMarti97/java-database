@@ -1,6 +1,8 @@
-package test;
+package examples;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Person {
 
@@ -11,6 +13,8 @@ public class Person {
     private float height;
 
     private LocalDate birthday;
+
+    private List<Person> friends = new ArrayList<>();
 
     public Person(int id, String name, float height, LocalDate birthday) {
         this.id = id;
@@ -56,6 +60,10 @@ public class Person {
 
     public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
+    }
+
+    public List<Person> getFriends() {
+        return friends;
     }
 
 }
